@@ -32,6 +32,7 @@ Content auto-generated that should be ignore:
 
 - [docs.monaca.io](https://en.docs.monaca.io/)
 - [docs.npmjs.com](https://docs.npmjs.com/)
+- [nwjs.readthedocs.io](https://nwjs.readthedocs.io/en/latest/)
 
 [changelog](CHANGELOG.md)
 

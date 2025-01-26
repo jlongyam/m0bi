@@ -31,6 +31,7 @@ Content auto-generated that should be ignore:
 ## References
 
 - [docs.monaca.io](https://en.docs.monaca.io/)
+- [docs.npmjs.com](https://docs.npmjs.com/)
 
 [changelog](CHANGELOG.md)
 

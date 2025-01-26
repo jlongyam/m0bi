@@ -1,11 +1,21 @@
 {
   "name": "m0bi",
-  "main": "index.html",
+  "author": "jlongyam",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlongyam/m0bi.git"
+  },
+  "license": "MIT",
   "version": "1.0.1",
   "displayName": "Mobile App Tester",
+  "bugs": {
+    "url": "https://github.com/jlongyam/m0bi/issues"
+  },
+  "homepage": "https://github.com/jlongyam/m0bi#readme"
   "engines": {
     "node": ">=18.16"
   },
+  "main": "index.html",
   "dependencies": {
     "monaca-plugin-monaca-core": "3.3.1"
   },

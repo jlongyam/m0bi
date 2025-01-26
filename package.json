@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/jlongyam/m0bi/issues"
   },
-  "homepage": "https://github.com/jlongyam/m0bi#readme"
+  "homepage": "https://github.com/jlongyam/m0bi#readme",
   "engines": {
     "node": ">=18.16"
   },

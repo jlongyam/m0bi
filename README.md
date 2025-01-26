@@ -32,6 +32,6 @@ Content auto-generated that should be ignore:
 
 - [docs.monaca.io](https://en.docs.monaca.io/)
 
-Version 1.0.0
+[changelog](CHANGELOG.md)
 
 [MIT](LICENSE)

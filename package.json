@@ -1,7 +1,8 @@
 {
-  "name": "monaca-template-minimum",
-  "version": "4.1.3",
-  "displayName": "Monaca Template Minimum",
+  "name": "m0bi",
+  "main": "index.html",
+  "version": "1.0.1",
+  "displayName": "Mobile App Tester",
   "engines": {
     "node": ">=18.16"
   },
@@ -10,7 +11,8 @@
   },
   "scripts": {
     "monaca:preview": "npm run dev",
-    "dev": "browser-sync start -s www/ --watch --port 8080 --ui-port 8081"
+    "dev": "browser-sync start -s www/ --watch --port 8080 --ui-port 8081",
+    "nw:preview": "nw ."
   },
   "cordova": {
     "plugins": {

@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="../../../cordova.js"></script>
+    <link rel="stylesheet" href="../../../components/loader.css">
+    <script src="../../../components/loader.js"></script>
+    <style>
+        #textarea {
+            width: 90%;
+            height: 100px;
+            border: 2px solid gray;
+        }
+        #pre {
+            border: 2px solid silver;
+            min-height: 16px;
+        }
+        #pre2 {
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cordova: File</h1>
+    <pre id="pre"></pre>
+    <textarea id="textarea"></textarea>
+    <p><button onclick="evalTextarea()">Eval</button></p>
+    <script>
+        var pre = document.getElementById('pre');
+        var textarea = document.getElementById('textarea');
+        function evalTextarea() {
+            pre.innerHTML = eval(textarea.value);
+        }
+    </script>
+    <pre id="pre2"></pre>
+    <script>
+        var pre2 = document.getElementById('pre2');
+        document.addEventListener("deviceready", init, false);
+        function init() {
+            window.resolveLocalFileSystemURL(cordova.file.applicationDirectory+'www/index.html', gotFile, fail);
+        }
+        function fail(e) {
+            pre2.innerHTML += 'Error: '+JSON.stringify(e,null,2);
+        }
+        function gotFile(fileEntry) {
+            fileEntry.file(function(file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    pre2.textContent += 'content is: '+this.result;
+                };
+                reader.readAsText(file);
+            });
+        }
+    </script>
+</body>
+</html>

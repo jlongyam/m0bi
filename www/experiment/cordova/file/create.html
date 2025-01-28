@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="../../../cordova.js"></script>
+    <link rel="stylesheet" href="../../../components/loader.css">
+    <script src="../../../components/loader.js"></script>
+    <style>
+        #textarea {
+            width: 90%;
+            height: 100px;
+            border: 2px solid gray;
+        }
+        #pre {
+            border: 2px solid silver;
+            min-height: 16px;
+        }
+        #pre2 {
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cordova: File create</h1>
+    <pre id="pre"></pre>
+    <textarea id="textarea"></textarea>
+    <p><button onclick="evalTextarea()">Eval</button></p>
+    <script>
+        var pre = document.getElementById('pre');
+        var textarea = document.getElementById('textarea');
+        function evalTextarea() {
+            pre.innerHTML = eval(textarea.value);
+        }
+    </script>
+    <pre id="pre2"></pre>
+    <script>
+        var pre2 = document.getElementById('pre2');
+        document.addEventListener("deviceready", onDeviceReady, false);
+        function onDeviceReady() {
+            pre2.innerHTML = 'cordova.file:<br>'+JSON.stringify(cordova.file,null,2);
+        }
+    </script>
+    <h3>Pass</h3>
+    <ul>
+        <li>[NO] cordova.file.applicationDirectory</li>
+        <li>[OK] cordova.file.applicationStorageDirectory</li>
+        <li>[OK] cordova.file.dataDirectory</li>
+        <li>[OK] cordova.file.cacheDirectory</li>
+        <li>[OK] cordova.file.externalApplicationStorageDirectory</li>
+        <li>[OK] cordova.file.externalDataDirectory</li>
+        <li>[OK] cordova.file.externalCacheDirectory</li>
+        <li>[NO] cordova.file.externalRootDirectory</li>
+        <li>[NO] cordova.file.tempDirectory</li>
+        <li>[NO] cordova.file.syncedDataDirectory</li>
+        <li>[NO] cordova.file.documentsDirectory</li>
+        <li>[NO] cordova.file.sharedDirectory</li>
+    </ul>
+    <pre id="pre3"></pre>
+    <script>
+        var log = document.getElementById('pre3');
+        document.addEventListener("deviceready", onDeviceReady, false);
+        function onDeviceReady() {
+            var file = {
+                // root: cordova.file.sharedDirectory,
+                // root: cordova.file.documentsDirectory,
+                //root: cordova.file.syncedDataDirectory,
+                //root: cordova.file.tempDirectory,
+                //root: cordova.file.externalCacheDirectory,
+                root: cordova.file.externalDataDirectory,
+                //root: cordova.file.cacheDirectory,
+                //root: cordova.file.applicationDirectory,
+                //root: cordova.file.dataDirectory,
+                //root: cordova.file.applicationStorageDirectory,
+                //root: cordova.file.externalApplicationStorageDirectory,
+                // cordova.file.externalRootDirectory (SDCard): FAIL
+                // require android 'manifest' permision WRITE_EXTERNAL_STRORAGE
+                // added in 'config.xml': FAIL
+                // <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
+                // <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
+                name: 'otherData.txt',
+                content: 'This is sample data content2.'
+            };
+            window.resolveLocalFileSystemURL(file.root, function(dirEntry) {  
+                dirEntry.getFile(file.name, { create: true }, function(fileEntry) {
+                    fileEntry.createWriter(function(fileWriter) {
+                        fileWriter.onwriteend = function(e) {
+                            log.innerHTML += 'file written successfuly!';
+                        }
+                        fileWriter.write(file.content);
+                    }, function(e) {
+                        log.innerHTML += 'error writing to file:<br>' + JSON.stringify(e,0,2);
+                    });
+                }, function(e) {
+                    log.innerHTML += 'error create file:<br>' + JSON.stringify(e,0,2);
+                });
+            }, function(e) {
+                log.innerHTML += 'error access directory:<br>' + JSON.stringify(e,0,2);
+            });
+        }
+    </script>
+</body>
+</html>

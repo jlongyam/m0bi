@@ -1,35 +1,37 @@
 {
-  "name": "m0bi",
-  "author": "jlongyam",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jlongyam/m0bi.git"
-  },
-  "license": "MIT",
-  "version": "1.0.1",
-  "displayName": "Mobile App Tester",
-  "bugs": {
-    "url": "https://github.com/jlongyam/m0bi/issues"
-  },
-  "homepage": "https://github.com/jlongyam/m0bi#readme",
-  "engines": {
-    "node": ">=18.16"
-  },
-  "main": "index.html",
-  "dependencies": {
-    "monaca-plugin-monaca-core": "3.3.1"
-  },
-  "scripts": {
-    "monaca:preview": "npm run dev",
-    "dev": "browser-sync start -s www/ --watch --port 8080 --ui-port 8081"
-  },
-  "cordova": {
-    "plugins": {
-      "monaca-plugin-monaca-core": {}
+    "name": "m0bi",
+    "author": "jlongyam",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jlongyam/m0bi.git"
+    },
+    "license": "MIT",
+    "version": "1.0.1",
+    "displayName": "Mobile App Tester",
+    "bugs": {
+        "url": "https://github.com/jlongyam/m0bi/issues"
+    },
+    "homepage": "https://github.com/jlongyam/m0bi#readme",
+    "engines": {
+        "node": ">=18.16"
+    },
+    "main": "index.html",
+    "dependencies": {
+        "monaca-plugin-monaca-core": "3.3.1",
+        "cordova-plugin-file": "8.0.1"
+    },
+    "scripts": {
+        "monaca:preview": "npm run dev",
+        "dev": "browser-sync start -s www/ --watch --port 8080 --ui-port 8081"
+    },
+    "cordova": {
+        "plugins": {
+            "monaca-plugin-monaca-core": {},
+            "cordova-plugin-file": {}
+        }
+    },
+    "devDependencies": {
+        "browser-sync": "~2.27.7",
+        "cordova": "^12.0.0"
     }
-  },
-  "devDependencies": {
-    "browser-sync": "~2.27.7",
-    "cordova": "^12.0.0"
-  }
 }

@@ -1,2 +1,6 @@
 /**/
 
+li {
+    min-height: 42px;
+    border-bottom: 2px dotted gray;
+}

@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <script src="../../../cordova.js"></script>
-    <link rel="stylesheet" href="../../../components/loader.css">
-    <script src="../../../components/loader.js"></script>
+    <!-- <link rel="stylesheet" href="../../../components/loader.css"> -->
+    <!-- <script src="../../../components/loader.js"></script> -->
     <style>
         #textarea {
             width: 90%;
@@ -59,7 +59,7 @@
     </ul>
     <pre id="pre3"></pre>
     <script>
-        var log = document.getElementById('pre3');
+        var pre3 = document.getElementById('pre3');
         document.addEventListener("deviceready", onDeviceReady, false);
         function onDeviceReady() {
             var file = {
@@ -82,6 +82,7 @@
                 name: 'otherData.txt',
                 content: 'This is sample data content2.'
             };
+            /*
             window.resolveLocalFileSystemURL(file.root, function(dirEntry) {  
                 dirEntry.getFile(file.name, { create: true }, function(fileEntry) {
                     fileEntry.createWriter(function(fileWriter) {
@@ -97,8 +98,57 @@
                 });
             }, function(e) {
                 log.innerHTML += 'error access directory:<br>' + JSON.stringify(e,0,2);
-            });
-        }
+            });*/
+            
+            function errorReport(error) {
+                pre3.innerHTML += JSON.stringify(error);
+            }
+            function fileCreate(fileEntry) {
+                fileEntry.createWriter(function(fileWriter) {
+                    fileWriter.onwriteend = function() {
+                        pre3.innerHTML += "File written successfully!";
+                    };
+                    fileWriter.onerror = errorReport;
+                    var blob = new Blob(["Hello from Cordova!"], { type: "text/plain" });
+                    fileWriter.write(blob); 
+                });
+            }
+            function obtainDirectory(dirEntry) {
+                dirEntry.getFile("myFile.txt", { create:true, exclusive: false }, function(fileEntry) {
+                    // File created successfully
+                    // Now you can write data to this file
+                    fileCreate(fileEntry)
+                }, errorReport);
+            }
+            window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
+                // Directory entry obtained successfully
+                // Proceed to create the file within this directory
+                obtainDirectory(dirEntry);
+            }, errorReport);
+
+            // from gemini
+            /*
+                function createFile() {
+                    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function(dirEntry) {
+                        dirEntry.getFile("myFile.txt", { create:true, exclusive: false }, function(fileEntry) {
+                            fileEntry.createWriter(function(fileWriter) {
+                                fileWriter.onwriteend = function() {
+                                    console.log("File written successfully!");
+                                };
+                                fileWriter.onerror = function(e) {
+                                    console.error("Write failed: " + e.toString());
+                                };
+                                fileWriter.write(new Blob(["Hello from Cordova!"], { type: "text/plain" }));
+                            });
+                        }, function(error) {
+                            console.error("Error creating file:", error);
+                        });
+                    }, function(error) {
+                        console.error("Error resolving directory:", error);
+                    });
+                }
+            */
+        };
     </script>
 </body>
 </html>

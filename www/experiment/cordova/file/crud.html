@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <script src="../../../cordova.js"></script>
+    <link href="../../../css/style.css" rel="stylesheet">
 </head>
 <body style="color:black">
     <h1>Cordova: file CRUD</h1>
@@ -14,10 +15,25 @@
             <option selected disabled>SELECT</option>
         </select>
     </p>
+    <p>
+        create dir in <u>cordova.file.<b>externalApplicationStorageDirectory</b></u><br>
+        <input id="input_dir" type="text" value="new_folder">
+        <button onclick="createDirectory()">createDir</button>
+        <br>
+        <code id="code"></code>
+        <br>
+        <input id="input_dir_rename_from" type="text" value="new_folder">
+        <input id="input_dir_rename_to" type="text" value="to_folder">
+        <button onclick="renameDirectory()">renameDir</button>
+        <br>
+        <code id="code_rename"></code>
+    </p>
+    <p>list directory:</p>
     <ul id="ul"></ul>
     <pre id="pre"></pre>
     <script src="../../../js/script.js"></script>
     <script>
+        var path_target = 'externalApplicationStorageDirectory';
         function displayCordovaStorage(root) {
             var inaccessible = [
                 'tempDirectory',
@@ -32,13 +48,43 @@
                 select.appendChild(option);
             }
         }
+        function displayStorageRoot() {
+            fs_dir_list(path_target, function(result) {
+                if(result) {
+                    ul.innerHTML = '';
+                    for(i in result) {
+                        i = parseInt(i);
+                        var li = document.createElement('li');
+                        li.textContent = result[i].fullPath;
+                        ul.appendChild(li);
+                    }
+                }
+            })
+        }
+        function createDirectory() {
+            fs_dir_create(path_target,input_dir.value, function(result) {
+                if(result) {
+                    code.innerHTML = 'new directory is <b>'+result+'</b>';
+                    displayStorageRoot()
+                }
+            })
+        }
+        function renameDirectory() {
+            fs_dir_rename(path_target, input_dir_rename_from.value, input_dir_rename_to.value).then(function(result) {
+                displayStorageRoot();
+            });
+
+        }
         function onDeviceReady() {
             displayCordovaStorage(cordova.file);
             select.addEventListener('change', function() {
-                fs_dir_list(cordova.file[select.value], function(result) {
-                    pre.textContent = JSON.stringify(result,0,2);
+                fs_dir_list(select.value, function(result) {
+                    if(result) {
+                        pre.textContent = JSON.stringify(result,0,2);
+                    }
                 })
             });
+            displayStorageRoot();
         }
         document.addEventListener("deviceready", onDeviceReady, false);
     </script>

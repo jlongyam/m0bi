@@ -1,6 +1,7 @@
 /**/
-
+p {
+    line-height: 2.5;
+}
 li {
-    min-height: 42px;
     border-bottom: 2px dotted gray;
 }

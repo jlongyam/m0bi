@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <script src="../../../cordova.js"></script>
+    <link href="../../../css/style.css" rel="stylesheet">
+</head>
+<body style="color:black">
+    <h1>Cordova: file CRUD File</h1>
+    <p>list <b>externalApplicationStorageDirectory</b>:</p>
+    <ul id="ul"></ul>
+    <section>
+        <p>create File</p>
+        <textarea id="textarea_content">NEW_CONTENT</textarea><br>
+        <input id="input_create" value="new_file.txt"><br>
+        <button onclick="createFile()">Create File</button>
+        <code id="code_create"></code>
+    </section>
+    <section>
+        <h4>read_file</h4>
+        <textarea id="textarea_read" cols="40" rows="5"></textarea><br>
+        <button onclick="readFile()">read File</button> <b>new_file.txt</b>
+        <code id="code_read"></code>
+    </section>
+    <section>
+        <h4>rename or move file</h4>
+        <input type="text" id="input_rename_from" value="new_file.txt"><br>
+        <input type="text" id="input_rename_to" value="to_file.txt"><br>
+        <button onclick="renameFile()">Rename file</button>
+        <code id="code_rename"></code>
+    </section>
+    <pre id="log"></pre>
+    <script src="../../../js/script.js"></script>
+    <script type="module">
+        import FS_Cordova from '../../../js/fs_cordova.js';
+        
+        document.addEventListener("deviceready", function() {
+            var fs = new FS_Cordova();
+            var meta = fs.listDir(cordova.file['externalApplicationStorageDirectory']);
+            meta.then((result,error)=> {
+                
+                log.textContent = JSON.stringify(result,0,2);
+            })
+        }, false);
+        
+        
+    </script>
+    <script>
+        var path_target = 'externalApplicationStorageDirectory';
+        function displayStorageRoot(path) {
+            fs_dir_list(path, function(result) {
+                if(result) {
+                    ul.innerHTML = '';
+                    for(i in result) {
+                        i = parseInt(i);
+                        var li = document.createElement('li');
+                        li.textContent = result[i].fullPath;
+                        ul.appendChild(li);
+                    }
+                }
+            })
+        }
+        function createFile() {
+            fs_file_create(path_target, input_create.value, textarea_content.value, function(result) {
+                code_create.textContent = JSON.stringify(result,0,2);
+                displayStorageRoot(path_target);
+            })
+        }
+        function readFile() {
+            fs_file_read(path_target, input_create.value, function(display) {
+                textarea_read.value = display.result;
+                code_read.textContent = JSON.stringify(display.event,0,2);
+            })
+        }
+        function renameFile() {
+            fs_file_move(path_target, input_rename_from.value, input_rename_to.value).then(function(e) {
+                code_rename.textContent = JSON.stringify(e,0,2);
+            }).then(function(){
+                displayStorageRoot(path_target)
+            })
+        }
+        function onDeviceReady() {
+            displayStorageRoot(path_target);
+        }
+        document.addEventListener("deviceready", onDeviceReady, false);
+    </script>
+</body>
+</html>

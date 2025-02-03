@@ -18,15 +18,25 @@
     <p>
         create dir in <u>cordova.file.<b>externalApplicationStorageDirectory</b></u><br>
         <input id="input_dir" type="text" value="new_folder">
-        <button onclick="createDirectory()">createDir</button>
-        <br>
+        <button onclick="createDirectory()">createDir</button><br>
         <code id="code"></code>
-        <br>
-        <input id="input_dir_rename_from" type="text" value="new_folder">
-        <input id="input_dir_rename_to" type="text" value="to_folder">
-        <button onclick="renameDirectory()">renameDir</button>
-        <br>
+        <hr>
+        <p>move folder to other directory</p>
+        <input id="input_dir_move_from" type="text" value="new_folder">
+        <input id="input_path_to" type="text" value="applicationStorageDirectory" readonly>
+        <button onclick="moveDirectory()">moveDirectory</button><br>
+        <code id="code_move"></code>
+        <hr>
+        <p>rename folder</p>
+        <input id="input_folder_from" type="text" value="new_folder">
+        <input id="input_folder_to" type="text" value="to_folder">
+        <button onclick="renameFolder()">renameFolder</button><br>
         <code id="code_rename"></code>
+        <hr>
+        <p>delete folder</p>
+        <input id="input_folder_delete" type="text" value="new_folder">
+        <button onclick="deleteFolder()">deleteFolder recursive</button><br>
+        <code id="code_delete"></code>
     </p>
     <p>list directory:</p>
     <ul id="ul"></ul>
@@ -48,8 +58,8 @@
                 select.appendChild(option);
             }
         }
-        function displayStorageRoot() {
-            fs_dir_list(path_target, function(result) {
+        function displayStorageRoot(path_) {
+            fs_dir_list(path_, function(result) {
                 if(result) {
                     ul.innerHTML = '';
                     for(i in result) {
@@ -65,15 +75,29 @@
             fs_dir_create(path_target,input_dir.value, function(result) {
                 if(result) {
                     code.innerHTML = 'new directory is <b>'+result+'</b>';
-                    displayStorageRoot()
+                    displayStorageRoot(path_target)
                 }
             })
         }
-        function renameDirectory() {
-            fs_dir_rename(path_target, input_dir_rename_from.value, input_dir_rename_to.value).then(function(result) {
-                displayStorageRoot();
+        function moveDirectory() {
+            fs_dir_move(path_target, input_dir_move_from.value, input_path_to.value, function(result) {
+                code_move.textContent = 'Folder moved: '+JSON.stringify(result,0,2);
+                displayStorageRoot(input_path_to.value);
             });
-
+        }
+        function renameFolder() {
+            fs_dir_rename(path_target,input_folder_from.value, input_folder_to.value, function(result) {
+                code_rename.textContent =  JSON.stringify(result,0,2);
+                displayStorageRoot(path_target);
+            }, function(err) {
+                code_rename.textContent = JSON.stringify(err,0,2);
+            })
+        }
+        function deleteFolder() {
+            fs_dir_remove(path_target, input_folder_delete.value, function(result) {
+                code_delete.textContent = JSON.stringify(result);
+                displayStorageRoot(path_target);
+            })
         }
         function onDeviceReady() {
             displayCordovaStorage(cordova.file);
@@ -84,7 +108,7 @@
                     }
                 })
             });
-            displayStorageRoot();
+            displayStorageRoot(path_target);
         }
         document.addEventListener("deviceready", onDeviceReady, false);
     </script>

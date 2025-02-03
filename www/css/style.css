@@ -5,3 +5,8 @@ p {
 li {
     border-bottom: 2px dotted gray;
 }
+section {
+    border-bottom: 2px dotted silver;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+}

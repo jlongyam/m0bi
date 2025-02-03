@@ -18,7 +18,8 @@
     "main": "index.html",
     "dependencies": {
         "monaca-plugin-monaca-core": "3.3.1",
-        "cordova-plugin-file": "8.0.1"
+        "cordova-plugin-file": "8.0.1",
+        "cordova-custom-config": "5.1.1"
     },
     "scripts": {
         "monaca:preview": "npm run dev",
@@ -27,7 +28,8 @@
     "cordova": {
         "plugins": {
             "monaca-plugin-monaca-core": {},
-            "cordova-plugin-file": {}
+            "cordova-plugin-file": {},
+            "cordova-custom-config": {}
         }
     },
     "devDependencies": {
